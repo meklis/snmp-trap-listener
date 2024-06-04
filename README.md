@@ -11,8 +11,7 @@ bash ./build.sh
 You can redefine parameters by specifying them through environment variables.   
 Alternatively, you can launch the compiled utility with the argument -config specifying the path to the configuration file.   
 
-```yaml 
-#Logger configuration
+```yaml
 logger:
   console:
     enabled: true
@@ -21,7 +20,7 @@ logger:
 
 listen:
   address: ${LISTEN_ADDRESS:0.0.0.0:162}
-  community: ${LISTEN_COMMUNITY}
+  community: ${LISTEN_COMMUNITY}  #Leave empty for disable checking 
 
 redis:
   enabled: true
