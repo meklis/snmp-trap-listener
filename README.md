@@ -1,5 +1,5 @@
 # SNMP trap listener
-Listens for SNMP traps on the specified interface and sends the received packets to a Redis channel in JSON format.
+Listens for SNMP traps on the specified interface and sends the received packets to a Redis channel(Pub/Sub) in JSON format.
 
 ## Build 
 **Requires Go 1.19+**
