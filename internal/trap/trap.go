@@ -65,8 +65,9 @@ func NewTrap() *Trap {
 }
 
 func (l *Listener) myTrapHandler(packet *g.SnmpPacket, addr *net.UDPAddr) {
-	if l.strictByCommunity && packet.Community != g.Default.Community {
-		log.Printf("got trapdata from %s with community %s, waiting community %s\n", addr.IP, packet.Community, g.Default.Community)
+	if l.community != "" && packet.Community != l.community {
+		logrus.Errorf("got trapdata from %s with community %s, waiting for community %s", addr.IP, packet.Community, g.Default.Community)
+		return
 	}
 	trap := NewTrap()
 	trap.Host = addr.IP.String()
@@ -74,7 +75,7 @@ func (l *Listener) myTrapHandler(packet *g.SnmpPacket, addr *net.UDPAddr) {
 	dataRaw := make(map[string]map[string]interface{})
 	trap.Community = packet.Community
 	trap.Data = dataRaw
-	logrus.Debugf("New packet received from %s with version %s and community %v\n", addr.IP, packet.Version, packet.Community)
+	logrus.Debugf("new packet received from %s with version %s and community %v", addr.IP, packet.Version, packet.Community)
 	for _, v := range packet.Variables {
 		if _, ok := dataRaw[v.Name]; !ok {
 			dataRaw[v.Name] = make(map[string]interface{})
@@ -178,7 +179,7 @@ func (l *Listener) myTrapHandler(packet *g.SnmpPacket, addr *net.UDPAddr) {
 	}
 	err := l.publish(trap)
 	if err != nil {
-		logrus.Errorf("Error sending trap to handler: %v", err)
+		logrus.Errorf("error sending trap to handler: %v", err)
 	}
 }
 
