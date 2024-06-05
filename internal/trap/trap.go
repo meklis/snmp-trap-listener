@@ -126,7 +126,7 @@ func (l *Listener) myTrapHandler(packet *g.SnmpPacket, addr *net.UDPAddr) {
 			dataRaw[v.Name]["value"] = c
 			dataRaw[v.Name]["type"] = "Counter32"
 		case g.Gauge32:
-			g32 := v.Value.(uint32)
+			g32 := v.Value.(uint)
 			dataRaw[v.Name]["value"] = g32
 			dataRaw[v.Name]["type"] = "Gauge32"
 		case g.TimeTicks:
