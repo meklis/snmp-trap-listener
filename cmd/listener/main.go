@@ -22,7 +22,7 @@ func main() {
 	rds := redis.NewRedis(conf.Redis.Address, conf.Redis.Password, conf.Redis.Database, conf.Redis.Channel)
 	var handler func(data interface{}) error
 	if conf.Redis.Enabled {
-		logrus.Info("sending to WCA enabled, try connect to redis")
+		logrus.Info("sending enabled, try connect to redis")
 		rds.TryConnect()
 		handler = rds.Publish
 	} else {
