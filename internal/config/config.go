@@ -43,12 +43,18 @@ type Redis struct {
 	Channel  string `yaml:"channel"`
 }
 
-// Config represents the entire configuration.
+type ScriptHandlerConfig struct {
+	Enabled       bool   `yaml:"enabled"`
+	CountHandlers int    `yaml:"count_handlers"`
+	QueueSize     int    `yaml:"queue_size"`
+	Command       string `yaml:"command"`
+}
 type Configuration struct {
-	Logger     LoggerConfig     `yaml:"logger"`
-	Prometheus PrometheusConfig `yaml:"prometheus"`
-	Listen     ListenConfig     `yaml:"listen"`
-	Redis      Redis            `yaml:"redis"`
+	Logger        LoggerConfig        `yaml:"logger"`
+	Prometheus    PrometheusConfig    `yaml:"prometheus"`
+	Listen        ListenConfig        `yaml:"listen"`
+	Redis         Redis               `yaml:"redis"`
+	ScriptHandler ScriptHandlerConfig `yaml:"script_handler"`
 }
 
 func LoadConfig(path string, Config *Configuration) error {

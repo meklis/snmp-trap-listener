@@ -15,9 +15,13 @@ listen:
   community: ${LISTEN_COMMUNITY} #Leave empty for disable checking
 
 redis:
-  enabled: true
+  enabled: false
   address: ${REDIS_ADDRESS:wca-redis:6379}
   password: ${REDIS_PASSWORD}
-  database: ${REDIS_DB:0}
-  channel: ${REDIS_CHANNEL:snmptrap}
+  channel: ${REDIS_CHANNEL:trapservice}
 
+script_handler:
+  enabled: true
+  count_handlers: 10
+  queue_size: 500
+  command: docker exec -i trapservice:handler

@@ -14,7 +14,7 @@ type Listener struct {
 	listenAddr        string
 	community         string
 	strictByCommunity bool
-	publish           func(data interface{}) error
+	publish           []func(data interface{}) error
 }
 
 func NewTrapListener(listenAddress, community string, strictByCommunity bool) *Listener {
@@ -29,13 +29,18 @@ func NewTrapListener(listenAddress, community string, strictByCommunity bool) *L
 	listener.community = community
 	listener.strictByCommunity = strictByCommunity
 	listener.trapListener = tl
+	listener.publish = make([]func(data interface{}) error, 0)
 
 	return listener
 }
 
 func (l *Listener) SetPublisher(publisher func(data interface{}) error) {
-	l.publish = publisher
+	l.publish = make([]func(data interface{}) error, 0)
+	l.publish = append(l.publish, publisher)
 
+}
+func (l *Listener) AddPublisher(publisher func(data interface{}) error) {
+	l.publish = append(l.publish, publisher)
 }
 
 func (l *Listener) Listen() error {
@@ -174,12 +179,14 @@ func (l *Listener) myTrapHandler(packet *g.SnmpPacket, addr *net.UDPAddr) {
 			delete(dataRaw, v.Name)
 		}
 	}
-	if l.publish == nil {
+	if l.publish == nil || len(l.publish) == 0 {
 		return
 	}
-	err := l.publish(trap)
-	if err != nil {
-		logrus.Errorf("error sending trap to handler: %v", err)
+	for _, publish := range l.publish {
+		err := publish(trap)
+		if err != nil {
+			logrus.Errorf("error sending trap to handler: %v", err)
+		}
 	}
 }
 
