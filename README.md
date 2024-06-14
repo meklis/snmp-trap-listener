@@ -28,8 +28,7 @@ listen:
 redis:
   enabled: true
   address: ${REDIS_ADDRESS:127.0.0.1:6379}
-  password: ${REDIS_PASSWORD}
-  database: ${REDIS_DB:0}
+  password: ${REDIS_PASSWORD} 
   channel: ${REDIS_CHANNEL:snmptrap}
   
 script_handler:
